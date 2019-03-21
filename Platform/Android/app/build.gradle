@@ -1,0 +1,52 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 28
+    defaultConfig {
+        applicationId "org.atframework"
+        minSdkVersion 21
+        targetSdkVersion 28
+        versionCode 1
+        versionName "0.1.0"
+        externalNativeBuild {
+            cmake {
+                abiFilters "armeabi-v7a"
+                // see https://developer.android.com/ndk/guides/cmake for more details
+                arguments   "-DANDROID_TOOLCHAIN=clang",
+                            "-DANDROID_STL=c++_static",
+                            "-DANDROID_PIE=YES",
+                            "-DANDROID_CPP_FEATURES=rtti exceptions",
+                            "-DANDROID_NDK=NO",
+                            "-DPROJECT_ENABLE_UNITTEST=OFF",
+                            "-DPROJECT_ENABLE_SAMPLE=OFF"
+            }
+        }
+
+        shaders {
+            glslcArgs.addAll(['-c', '-g'])
+        }
+    }
+
+    buildTypes {
+        // see http://google.github.io/android-gradle-dsl/current/com.android.build.gradle.internal.dsl.BuildType.html
+        release {
+            // minifyEnabled true
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            applicationIdSuffix ".debug"
+            debuggable true
+        }
+    }
+    externalNativeBuild {
+        cmake {
+            path "../../../CMakeLists.txt"
+            // path 'src/main/cpp/CMakeLists.txt'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+}

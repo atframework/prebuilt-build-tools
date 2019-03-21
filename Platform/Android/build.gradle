@@ -1,0 +1,30 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    repositories {
+        maven {
+            url "http://maven.oa.com/nexus/content/groups/androidbuild"
+        }
+        
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.3.1'
+        
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+        // see https://developer.android.com/studio/releases/gradle-plugin
+        // 不要用 3.3.2 版本，有BUG native编不过， gradle下载地址见 gradle/wrapper/gradle-wrapper.properties
+    }
+}
+
+allprojects {
+    repositories {
+        maven {
+            url "http://maven.oa.com/nexus/content/groups/androidbuild"
+        }
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}

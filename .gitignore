@@ -1,0 +1,4 @@
+.git
+.svn
+
+/ThirdParty/Prebuilt/*-*

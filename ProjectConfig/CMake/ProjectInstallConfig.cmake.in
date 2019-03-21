@@ -1,0 +1,63 @@
+#.rst:
+# @TARGET_NAME@Config.cmake
+# --------
+#
+# Find the native @TARGET_NAME@ includes and library.
+#
+#
+# Result Variables
+# ^^^^^^^^^^^^^^^^
+#
+# This module defines the following variables:
+#
+# ::
+#
+#   @TARGET_NAME@_INCLUDE_DIRS   - where to find headers of @TARGET_NAME@ , etc.
+#   @TARGET_NAME@_LIBRARY_DIRS   - where to find (lib)atbus.(a/so/lib/dll/dylib), etc.
+#   @TARGET_NAME@_LIBRARIES      - List of libraries when using @TARGET_NAME@.
+#   @TARGET_NAME@_FOUND          - True if @TARGET_NAME@ found.
+#   @TARGET_NAME@_VERSION        - Full version of @TARGET_NAME@
+#
+# ::
+#
+
+#=============================================================================
+# Copyright 2019 owent.
+#
+# Distributed under the OSI-approved BSD License (the "License");
+# see accompanying file Copyright.txt for details.
+#
+# This software is distributed WITHOUT ANY WARRANTY; without even the
+# implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# See the License for more information.
+#=============================================================================
+# (To distribute this file outside of CMake, substitute the full
+#  License text for the above reference.)
+
+set(@TARGET_NAME@_VERSION "@TARGET_VERSION@")
+
+@PACKAGE_INIT@
+
+################################################################################
+# @TARGET_NAME@ source dir
+set(@TARGET_NAME@_SOURCE_DIR "@PROJECT_SOURCE_DIR@")
+
+set_and_check(@TARGET_NAME@_INCLUDE_DIRS "@PACKAGE_INCLUDE_INSTALL_DIR@")
+set_and_check(@TARGET_NAME@_LIBRARY_DIRS "@PACKAGE_CMAKE_INSTALL_LIBDIR@")
+
+# Normal search.
+set(@TARGET_NAME@_NAMES @TARGET_NAME@ lib@TARGET_NAME@)
+
+# Try each search configuration.
+find_library(@TARGET_NAME@_LIBRARIES NAMES ${@TARGET_NAME@_NAMES} PATHS ${@TARGET_NAME@_LIBRARY_DIRS} NO_DEFAULT_PATH)
+
+mark_as_advanced(@TARGET_NAME@_INCLUDE_DIRS @TARGET_NAME@_LIBRARY_DIRS @TARGET_NAME@_LIBRARIES Libcotask_LIBRARIES)
+
+# handle the QUIETLY and REQUIRED arguments and set @TARGET_NAME@_FOUND to TRUE if
+# all listed variables are TRUE
+include("FindPackageHandleStandardArgs")
+FIND_PACKAGE_HANDLE_STANDARD_ARGS(@TARGET_NAME@ 
+    FOUND_VAR @TARGET_NAME@_FOUND
+    REQUIRED_VARS @TARGET_NAME@_INCLUDE_DIRS @TARGET_NAME@_LIBRARIES)
+
+# check_required_components(@TARGET_NAME@)

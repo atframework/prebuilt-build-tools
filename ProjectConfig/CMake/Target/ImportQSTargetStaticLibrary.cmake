@@ -1,0 +1,8 @@
+## 生成文档和导入配置
+
+source_group_by_dir(SOURCE_FILE_LIST)
+source_group_by_dir(HEADER_FILE_LIST)
+
+include_directories(${ATFRAME_TARGET_STATIC_INCLUDE_DIRS} ${ATFRAME_TARGET_DYNAMIC_INCLUDE_DIRS})
+
+add_library(${TARGET_NAME} STATIC ${HEADER_FILE_LIST} ${SOURCE_FILE_LIST})
