@@ -89,5 +89,9 @@ include ("${PROJECT_SOURCE_DIR}/ProjectConfig/CMake/ProjectThirdPartyTarget.cmak
 include ("${CMAKE_CURRENT_LIST_DIR}/SetupCompactEnvs.cmake")
 
 ATPBTargetAddThirdParty("perl")
-ATPBTargetAddThirdParty("openssl")
+# ATPBTargetAddThirdParty("openssl")
+ATPBTargetAddThirdParty("libressl")
 ATPBTargetAddThirdParty("libcurl")
+ATPBTargetAddThirdParty("libuv")
+ATPBTargetAddThirdParty("protobuf")
+ATPBTargetAddThirdParty("libatapp")
