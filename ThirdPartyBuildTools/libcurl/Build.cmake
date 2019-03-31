@@ -34,7 +34,7 @@ if (NOT PROJECT_ATFRAME_TARGET_CPU_ABI STREQUAL x86 AND NOT PROJECT_ATFRAME_TARG
 endif ()
 
 if (ATFRAME_THIRD_PARTY_TARGET_LIBRESSL_INSTALL_PREFIX)
-    set (ATFRAME_THIRD_PARTY_LIBCURL_SSL ${ATFRAME_THIRD_PARTY_LIBCURL_SSL})
+    set (ATFRAME_THIRD_PARTY_LIBCURL_SSL ${ATFRAME_THIRD_PARTY_TARGET_LIBRESSL_INSTALL_PREFIX})
     set (ATFRAME_THIRD_PARTY_LIBCURL_SSL_DEP "install-libressl")
 else (ATFRAME_THIRD_PARTY_TARGET_OPENSSL_INSTALL_PREFIX)
     set (ATFRAME_THIRD_PARTY_LIBCURL_SSL ${ATFRAME_THIRD_PARTY_TARGET_OPENSSL_INSTALL_PREFIX})
@@ -55,7 +55,7 @@ else ()
     ATPBTargetBuildThirdPartyByConfigure(
         "${ATFRAME_THIRD_PARTY_LIBCURL_SRC_DIR}/configure"
         BASH ${ATFRAME_THIRD_PARTY_UNIX_BUILD_CONFIG_SCRIPT}
-        ARGS "--with-pic=yes" "--enable-shared=no" "--enable-static=yes" "--disable-manual"
+        CONFIGURE_ARGS "--with-pic=yes" "--enable-shared=no" "--enable-static=yes" "--disable-manual"
              "--with-ssl=${ATFRAME_THIRD_PARTY_LIBCURL_SSL}"
     )
 endif ()

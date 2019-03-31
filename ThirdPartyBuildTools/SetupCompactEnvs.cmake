@@ -266,4 +266,6 @@ echo \"\$PWD:\\n\\t\$OUTPUT_COMMAND_LINE\" >> \"\$(convert_path \"${ATFRAME_THIR
 
 \"\$@\"
     ")
+
+    ATPBMakeExecutable(${ATFRAME_THIRD_PARTY_UNIX_BUILD_CONFIG_SCRIPT})
 endif ()
