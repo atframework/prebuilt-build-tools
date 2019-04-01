@@ -70,6 +70,7 @@ include ("${PROJECT_SOURCE_DIR}/ProjectConfig/CMake/ProjectThirdPartyTarget.cmak
 # - ATFRAME_THIRD_PARTY_INSTALL_PREFIX                   : 安装目录，一般为 ${PROJECT_SOURCE_DIR}/ThirdParty/【库名字】/Prebuilt/${CMAKE_SYSTEM_NAME}-${PROJECT_ATFRAME_TARGET_CPU_ABI}
 # - ATFRAME_THIRD_PARTY_INC_DIR                          : 头文件目录，一般为 ${ATFRAME_THIRD_PARTY_INSTALL_PREFIX}/include
 # - ATFRAME_THIRD_PARTY_LIB_DIR                          : 库文件目录，一般为 ${ATFRAME_THIRD_PARTY_INSTALL_PREFIX}/lib
+# - ATFRAME_THIRD_PARTY_BUILD_WORK_DIR                   : 目标库的构建目录
 # - ATFRAME_THIRD_PARTY_TARGET_NAME                      : 目标库名字
 # - ATFRAME_THIRD_PARTY_TARGET_PATH                      : 目标库 Build.cmake文件所在路径
 # - ATFRAME_THIRD_PARTY_TARGET_RELATIVE_ROOT_PATH        : 目标库相对于工程根目录的路径
@@ -93,5 +94,6 @@ ATPBTargetAddThirdParty("perl")
 ATPBTargetAddThirdParty("libressl")
 ATPBTargetAddThirdParty("libcurl")
 ATPBTargetAddThirdParty("libuv")
-ATPBTargetAddThirdParty("protobuf")
+ATPBTargetAddThirdParty("msgpack")
 ATPBTargetAddThirdParty("libatapp")
+ATPBTargetAddThirdParty("protobuf")
