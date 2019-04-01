@@ -8,8 +8,8 @@ if (CURL_ROOT)
     )
 
     add_custom_target(install-libcurl ALL 
-    ${CMAKE_COMMAND} -E echo "Using prebuilt openssl at ${OPENSSL_ROOT_DIR} install-libcurl"
-    DEPENDS libcurl
+        ${CMAKE_COMMAND} -E echo "Using prebuilt openssl at ${OPENSSL_ROOT_DIR} install-libcurl"
+        DEPENDS libcurl
     )
 
     set_property(TARGET install-libcurl PROPERTY FOLDER "install/${ATFRAME_THIRD_PARTY_TARGET_RELATIVE_ROOT_MODULE}")
@@ -22,7 +22,7 @@ if (CURL_ROOT)
         set (ATFRAME_THIRD_PARTY_LIBCURL_SSL ${ATFRAME_THIRD_PARTY_TARGET_OPENSSL_INSTALL_PREFIX})
         set (ATFRAME_THIRD_PARTY_LIBCURL_SSL_DEP "install-openssl")
     endif ()
-    
+
 else ()
     set (ATFRAME_THIRD_PARTY_LIBCURL_VERSION  "7.64.1")
     set (ATFRAME_THIRD_PARTY_LIBCURL_PKG_DIR  "${ATFRAME_THIRD_PARTY_TARGET_LIBCURL_BUILD_DIR}/source")
