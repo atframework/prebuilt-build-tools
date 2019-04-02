@@ -33,11 +33,11 @@ echo "$SYSTEM_NAME";
 # prefer to use ninja
 CMAKE_GENERATOR="MSYS Makefiles";
 cmake --help | grep "$CMAKE_GENERATOR" > /dev/null 2>&1;
-printf "Checking ninja ...              ";
 if [ $? -ne 0 ]; then
     CMAKE_GENERATOR="Unix Makefiles";
 fi
 
+printf "Checking ninja ...              ";
 USE_NINJA=0;
 NINJA_BIN="$(which ninja 2>/dev/null)";
 if [ $? -eq 0 ]; then
@@ -61,24 +61,31 @@ echo "$NINJA_BIN";
 
 # prefer to use clang
 printf "Checking compiler ...           ";
-CC="$(which clang 2>/dev/null)";
-CXX="$(which clang++ 2>/dev/null)";
-if [ -z "$CC" ] || [ -z "$CXX" ]; then
-    CC="$(which gcc 2>/dev/null)";
-    CXX="$(which g++ 2>/dev/null)";
+if [ -z "$CC" ]; then
+    CC="$(which clang 2>/dev/null)";
+    if [ -z "$CC" ] || [ -z "$CXX" ]; then
+        CC="$(which gcc 2>/dev/null)";
+        CXX="$(which g++ 2>/dev/null)";
+    fi
 fi
 
-if [ -z "$CC" ] || [ -z "$CXX" ]; then
-    echo "Can not find clang/clang++ or gcc/g++.";
-    exit 3;
+if [ -z "CXX" ]; then
+    CXX="$(which clang++ 2>/dev/null)";
+    if [ -z "$CC" ] || [ -z "$CXX" ]; then
+        echo "Can not find clang/clang++ or gcc/g++.";
+        exit 3;
+    fi
 fi
 
 echo "$CC / $CXX";
 
 printf "Checking ar ...                 ";
-AR="$(which llvm-ar 2>/dev/null)";
-if [ -z "$AR" ]; then
-    AR="$(which ar 2>/dev/null)";
+
+if [ -z "AR" ]; then
+    AR="$(which llvm-ar 2>/dev/null)";
+    if [ -z "$AR" ]; then
+        AR="$(which ar 2>/dev/null)";
+    fi
 fi
 
 if [ -z "$AR" ]; then
@@ -89,13 +96,15 @@ fi
 echo "$AR";
 
 printf "Checking ld ...                 ";
-LD="$(which ld.lld 2>/dev/null)";
-if [ -z "$LD" ]; then
-    LD="$(which lld 2>/dev/null)";
-fi
+if [ -z "LD" ]; then
+    LD="$(which ld.lld 2>/dev/null)";
+    if [ -z "$LD" ]; then
+        LD="$(which lld 2>/dev/null)";
+    fi
 
-if [ -z "$LD" ]; then
-    LD="$(which ld 2>/dev/null)";
+    if [ -z "$LD" ]; then
+        LD="$(which ld 2>/dev/null)";
+    fi
 fi
 
 if [ -z "$LD" ]; then
@@ -178,10 +187,10 @@ else
     PROJECT_ATFRAME_BUILD_THIRD_PARTY_BUSYBOX_MODE="ON";
 fi
 
-cmake -G "$CMAKE_GENERATOR" "$SCRIPT_DIR/../../" -DCMAKE_INSTALL_PREFIX="$INSTALL_PREFIX"   \
-    -DPROJECT_ATFRAME_BUILD_THIRD_PARTY=ON                                                       \
-    -DPROJECT_ATFRAME_BUILD_THIRD_PARTY_BUSYBOX_MODE=$PROJECT_ATFRAME_BUILD_THIRD_PARTY_BUSYBOX_MODE  \
-    -DCMAKE_INSTALL_RPATH_USE_LINK_PATH=YES                                                 \
-    -DCMAKE_C_COMPILER="$CC" -DCMAKE_CXX_COMPILER="$CXX" -DCMAKE_AR="$AR"                   \
+cmake -G "$CMAKE_GENERATOR" "$SCRIPT_DIR/../../" -DCMAKE_INSTALL_PREFIX="$INSTALL_PREFIX"               \
+    -DPROJECT_ATFRAME_BUILD_THIRD_PARTY=ON                                                              \
+    -DPROJECT_ATFRAME_BUILD_THIRD_PARTY_BUSYBOX_MODE=$PROJECT_ATFRAME_BUILD_THIRD_PARTY_BUSYBOX_MODE    \
+    -DCMAKE_INSTALL_RPATH_USE_LINK_PATH=YES                                                             \
+    -DCMAKE_C_COMPILER="$CC" -DCMAKE_CXX_COMPILER="$CXX" -DCMAKE_AR="$AR"                               \
     "$@";
 
