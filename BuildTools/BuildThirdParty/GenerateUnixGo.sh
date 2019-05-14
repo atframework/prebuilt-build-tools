@@ -194,3 +194,6 @@ cmake -G "$CMAKE_GENERATOR" "$SCRIPT_DIR/../../" -DCMAKE_INSTALL_PREFIX="$INSTAL
     -DCMAKE_C_COMPILER="$CC" -DCMAKE_CXX_COMPILER="$CXX" -DCMAKE_AR="$AR"                               \
     "$@";
 
+if [ $? -eq 0 ]; then
+    cmake --build . -- -j8;
+fi

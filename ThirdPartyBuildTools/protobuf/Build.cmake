@@ -27,9 +27,19 @@ if (NOT EXISTS ${ATFRAME_THIRD_PARTY_PROTOBUF_SRC_DIR})
     message(FATAL_ERROR "${ATFRAME_THIRD_PARTY_PROTOBUF_SRC_DIR} not found.")
 endif ()
 
+unset(ATFRAME_THIRD_PARTY_PROTOBUF_CMAKE_OPTIONS)
+if (ANDROID)
+    if (ATFRAME_THIRD_PARTY_PROTOBUF_VERSION VERSION_GREATER_EQUAL "3.6.1")
+        list(APPEND ATFRAME_THIRD_PARTY_PROTOBUF_CMAKE_OPTIONS "-Dprotobuf_BUILD_PROTOC_BINARIES=OFF")
+    else ()
+        EchoWithColor(COLOR GREEN "-- Protobuf: 3.6.1 and below should modify cmake/CMakeList.txt and cmake/install.cmake to remove libprotoc and protoc")
+    endif ()
+endif()
+
 # standard cmake project
 ATPBTargetBuildThirdPartyByCMake("${ATFRAME_THIRD_PARTY_PROTOBUF_SRC_DIR}/cmake"
     ENV_PATH ${ATFRAME_THIRD_PARTY_BUILD_WORK_DIR} "${ATFRAME_THIRD_PARTY_BUILD_WORK_DIR}/${CMAKE_BUILD_TYPE}"
     CMAKE_ARGS "-Dprotobuf_BUILD_TESTS=OFF" "-Dprotobuf_BUILD_EXAMPLES=OFF" "-DBUILD_SHARED_LIBS=OFF" 
-                "-Dprotobuf_BUILD_SHARED_LIBS=OFF" "-Dprotobuf_MSVC_STATIC_RUNTIME=OFF"
+                "-Dprotobuf_BUILD_SHARED_LIBS=OFF" "-Dprotobuf_MSVC_STATIC_RUNTIME=OFF" 
+                ${ATFRAME_THIRD_PARTY_PROTOBUF_CMAKE_OPTIONS}
 )
