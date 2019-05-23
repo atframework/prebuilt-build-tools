@@ -33,7 +33,7 @@ fi
 
 # prefer to use ninja
 CMAKE_GENERATOR="MSYS Makefiles";
-cmake --help | grep "$CMAKE_GENERATOR" > /dev/null 2>&1;
+"$CMAKE_BIN" --help | grep "$CMAKE_GENERATOR" > /dev/null 2>&1;
 if [ $? -ne 0 ]; then
     CMAKE_GENERATOR="Unix Makefiles";
 fi
@@ -102,5 +102,5 @@ fi
         -DANDROID_PIE=YES "$@";
 
 if [ $? -eq 0 ]; then
-    "$CMAKE_BIN" --build . -- -j8;
+    "$CMAKE_BIN" --build . ;
 fi

@@ -4,35 +4,17 @@
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)";
 SCRIPT_DIR="${SCRIPT_DIR//\\//}";
 
-# cmake
-printf "Checking cmake ...              ";
-if [ -z "$CMAKE_HOME" ]; then
-    CMAKE_BIN="$(which cmake 2>&1)";
-    if [ $? -eq 0 ]; then
-        CMAKE_HOME="$(dirname "$(dirname "$CMAKE_BIN")")" ;
-    else
-        echo "Executable cmake not found ,please input the CMAKE_HOME(which contains bin/cmake) and then press ENTER.";
-        read -r -p "CMAKE_HOME: " CMAKE_HOME;
-        CMAKE_HOME="${CMAKE_HOME//\\/\/}";
-        export PATH="$CMAKE_HOME/bin:$PATH";
-    fi
+source "$SCRIPT_DIR/LoadCMakeEnvs.sh" ;
+
+if [ "x$SYSTEM_NAME" == "x" ]; then
+    SYSTEM_NAME="$(uname -s)-$ARCH";
+    printf "Checking system ...             ";
 fi
-
-if [ ! -e "$CMAKE_HOME/bin/cmake" ] && [ ! -e "$CMAKE_HOME/bin/cmake.exe" ]; then
-    echo "Can not find cmake in $CMAKE_HOME, exit now.";
-    exit 1;
-fi
-
-export CMAKE_HOME ;
-echo "$CMAKE_HOME";
-
-SYSTEM_NAME="$(uname -s)-$ARCH";
-printf "Checking system ...             ";
 echo "$SYSTEM_NAME";
 
 # prefer to use ninja
 CMAKE_GENERATOR="MSYS Makefiles";
-cmake --help | grep "$CMAKE_GENERATOR" > /dev/null 2>&1;
+"$CMAKE_BIN" --help | grep "$CMAKE_GENERATOR" > /dev/null 2>&1;
 if [ $? -ne 0 ]; then
     CMAKE_GENERATOR="Unix Makefiles";
 fi
@@ -57,34 +39,53 @@ else
     fi
 fi
 
-echo "$NINJA_BIN";
+if [ $USE_NINJA -ne 0 ]; then
+    echo "$NINJA_BIN";
+else
+    echo "not found";
+fi
 
 # prefer to use clang
 printf "Checking compiler ...           ";
 if [ -z "$CC" ]; then
     CC="$(which clang 2>/dev/null)";
-    if [ -z "$CC" ] || [ -z "$CXX" ]; then
-        CC="$(which gcc 2>/dev/null)";
-        CXX="$(which g++ 2>/dev/null)";
+    if [ $? -ne 0 ]; then
+        CC="";
     fi
 fi
 
-if [ -z "CXX" ]; then
+if [ -z "$CXX" ]; then
     CXX="$(which clang++ 2>/dev/null)";
-    if [ -z "$CC" ] || [ -z "$CXX" ]; then
-        echo "Can not find clang/clang++ or gcc/g++.";
-        exit 3;
+    if [ $? -ne 0 ]; then
+        CXX="";
     fi
+fi
+
+if [ -z "$CC" ] || [ -z "$CXX" ]; then
+    CC="$(which gcc 2>/dev/null)";
+    CXX="$(which g++ 2>/dev/null)";
+fi
+
+if [ -z "$CC" ] || [ -z "$CXX" ]; then
+    echo "Can not find clang/clang++ or gcc/g++.";
+    exit 3;
 fi
 
 echo "$CC / $CXX";
 
 printf "Checking ar ...                 ";
 
-if [ -z "AR" ]; then
+if [ -z "$AR" ]; then
     AR="$(which llvm-ar 2>/dev/null)";
+    if [ $? -ne 0 ]; then
+        AR="";
+    fi
+
     if [ -z "$AR" ]; then
         AR="$(which ar 2>/dev/null)";
+    fi
+    if [ $? -ne 0 ]; then
+        AR="";
     fi
 fi
 
@@ -96,14 +97,24 @@ fi
 echo "$AR";
 
 printf "Checking ld ...                 ";
-if [ -z "LD" ]; then
+if [ -z "$LD" ]; then
     LD="$(which ld.lld 2>/dev/null)";
+    if [ $? -ne 0 ]; then
+        LD="";
+    fi
+
     if [ -z "$LD" ]; then
         LD="$(which lld 2>/dev/null)";
+    fi
+    if [ $? -ne 0 ]; then
+        LD="";
     fi
 
     if [ -z "$LD" ]; then
         LD="$(which ld 2>/dev/null)";
+    fi
+    if [ $? -ne 0 ]; then
+        LD="";
     fi
 fi
 
@@ -187,13 +198,13 @@ else
     PROJECT_ATFRAME_BUILD_THIRD_PARTY_BUSYBOX_MODE="ON";
 fi
 
-cmake -G "$CMAKE_GENERATOR" "$SCRIPT_DIR/../../" -DCMAKE_INSTALL_PREFIX="$INSTALL_PREFIX"               \
+"$CMAKE_BIN" -G "$CMAKE_GENERATOR" "$SCRIPT_DIR/../../" -DCMAKE_INSTALL_PREFIX="$INSTALL_PREFIX"               \
     -DPROJECT_ATFRAME_BUILD_THIRD_PARTY=ON                                                              \
     -DPROJECT_ATFRAME_BUILD_THIRD_PARTY_BUSYBOX_MODE=$PROJECT_ATFRAME_BUILD_THIRD_PARTY_BUSYBOX_MODE    \
     -DCMAKE_INSTALL_RPATH_USE_LINK_PATH=YES                                                             \
-    -DCMAKE_C_COMPILER="$CC" -DCMAKE_CXX_COMPILER="$CXX" -DCMAKE_AR="$AR"                               \
+    "-DCMAKE_C_COMPILER=$CC" "-DCMAKE_CXX_COMPILER=$CXX" "-DCMAKE_AR=$AR"                               \
     "$@";
 
 if [ $? -eq 0 ]; then
-    cmake --build . -- -j8;
+    "$CMAKE_BIN" --build . ;
 fi

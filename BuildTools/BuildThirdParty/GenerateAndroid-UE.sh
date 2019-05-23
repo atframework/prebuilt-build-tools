@@ -65,8 +65,7 @@ for ARCH in $ANDROID_ARCHS; do
     chmod +x "$SCRIPT_DIR/GenerateAndroidGo.sh" ;
     "$SCRIPT_DIR/GenerateAndroidGo.sh"  \
             $UNREAL_LIBCURL_CMAKE       \
-            $UNREAL_OPENSSL_CMAKE       \
-            $UNREAL_LLVM_RANLIB_CMAKE
+            $UNREAL_OPENSSL_CMAKE
 
     LAST_EXIT_CODE=$?;
     if [ $LAST_EXIT_CODE -ne 0 ]; then
