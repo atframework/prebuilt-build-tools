@@ -30,7 +30,7 @@ if (OPENSSL_ROOT_DIR)
     set (ATFRAME_THIRD_PARTY_TARGET_OPENSSL_INSTALL_PREFIX ${OPENSSL_ROOT_DIR} CACHE PATH "Prebuilt openssl" FORCE)
 else ()
 
-    set (ATFRAME_THIRD_PARTY_OPENSSL_VERSION  "1.1.1b")
+    set (ATFRAME_THIRD_PARTY_OPENSSL_VERSION  "1.1.1c")
     set (ATFRAME_THIRD_PARTY_OPENSSL_PKG_DIR  "${ATFRAME_THIRD_PARTY_TARGET_OPENSSL_BUILD_DIR}/source")
     set (ATFRAME_THIRD_PARTY_OPENSSL_PKG_PATH "${ATFRAME_THIRD_PARTY_OPENSSL_PKG_DIR}/openssl-${ATFRAME_THIRD_PARTY_OPENSSL_VERSION}.tar.gz")
     set (ATFRAME_THIRD_PARTY_OPENSSL_SRC_DIR  "${ATFRAME_THIRD_PARTY_OPENSSL_PKG_DIR}/openssl-${ATFRAME_THIRD_PARTY_OPENSSL_VERSION}")
@@ -57,7 +57,7 @@ else ()
     unset (ATFRAME_THIRD_PARTY_OPENSSL_BUILD_OPTIONS)
     list (APPEND ATFRAME_THIRD_PARTY_OPENSSL_BUILD_OPTIONS 
         "--prefix\=${ATFRAME_THIRD_PARTY_INSTALL_PREFIX}"
-        "--openssldir\=${ATFRAME_THIRD_PARTY_INSTALL_PREFIX}/lib"
+        "--openssldir\=${ATFRAME_THIRD_PARTY_INSTALL_PREFIX}/ssl"
         "--release" "no-deprecated" "no-dso" "no-shared"
         "no-tests" "no-external-tests" "no-external-tests" 
         "no-aria" "no-bf" "no-blake2" "no-camellia" "no-cast" "no-idea" 
